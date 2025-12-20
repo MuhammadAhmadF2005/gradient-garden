@@ -7,10 +7,6 @@
 # ----------------------------
 # Libraries
 # ----------------------------
-if (!require(tidyverse)) install.packages("tidyverse")
-if (!require(corrplot)) install.packages("corrplot")
-if (!require(caret)) install.packages("caret")
-if (!require(gridExtra)) install.packages("gridExtra")
 
 library(tidyverse)
 library(corrplot)
@@ -21,19 +17,30 @@ library(gridExtra)
 # Step 1: Data Import & Cleaning
 # ----------------------------
 
-wine_data <- read.csv("winequality-red.csv", sep = ";")
+# NOTE: Ensure 'sep' matches your file. If your file uses commas, change ";" to ","
+wine_data <- read.csv("C:/Users/Lenovo/Downloads/wine.csv", sep = ",") 
+
+# Check if data loaded correctly (if ncol is 1, the separator is wrong)
+if(ncol(wine_data) <= 1) {
+  warning("Data seems to have only 1 column. Check your 'sep' argument in read.csv")
+}
 
 # Handle missing values (median imputation for numeric features)
 wine_data <- wine_data %>%
   mutate(across(where(is.numeric),
                 ~ ifelse(is.na(.), median(., na.rm = TRUE), .)))
 
-# Remove duplicate rows
-wine_data <- wine_data[!duplicated(wine_data), ]
+# Remove duplicate rows (Using distinct() is safer than base R here)
+wine_data <- wine_data %>% distinct()
 
 # Create categorical target variable
-wine_data$quality_label <- ifelse(wine_data$quality >= 6, "Good", "Bad")
-wine_data$quality_label <- as.factor(wine_data$quality_label)
+# We verify 'quality' exists before accessing it
+if("quality" %in% names(wine_data)) {
+  wine_data$quality_label <- ifelse(wine_data$quality >= 6, "Good", "Bad")
+  wine_data$quality_label <- as.factor(wine_data$quality_label)
+} else {
+  stop("Column 'quality' not found. Please check your CSV load step.")
+}
 
 # ----------------------------
 # Step 2: Exploratory Data Analysis
@@ -119,3 +126,4 @@ test_data  <- wine_data_scaled[-trainIndex, ]
 
 cat("Training set size:", nrow(train_data), "\n")
 cat("Testing set size:", nrow(test_data), "\n")
+
