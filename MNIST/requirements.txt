@@ -2,3 +2,5 @@ scikit-learn
 numpy
 Pillow
 joblib
+flask
+werkzeug

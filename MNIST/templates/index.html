@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MNIST ML Pipeline</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Modern Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-elements">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <div class="container glass-panel">
+        <header>
+            <h1>MNIST Digit Classifier</h1>
+            <p>Upload a handwritten digit (0-9) to see our upgraded SGD Pipeline in action.</p>
+        </header>
+
+        <main>
+            <div class="upload-area" id="drop-zone">
+                <input type="file" id="file-input" accept="image/png, image/jpeg, image/jpg" hidden>
+                <div class="upload-content">
+                    <svg viewBox="0 0 24 24" width="48" height="48" stroke="currentColor" stroke-width="2" fill="none" class="upload-icon">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <p>Drag & Drop an image here</p>
+                    <span>OR</span>
+                    <button class="btn-primary" id="browse-btn">Browse Files</button>
+                </div>
+                <img id="image-preview" class="hidden" alt="Image Preview">
+            </div>
+
+            <div class="controls">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="invert-check">
+                    <span class="slider"></span>
+                </label>
+                <span class="toggle-label">Invert Colors (if image is dark ink on a light bg)</span>
+            </div>
+
+            <button id="predict-btn" class="btn-primary predict-btn hidden">Predict Digit</button>
+
+            <div id="result-container" class="result-container hidden">
+                <h2>Prediction Result:</h2>
+                <div class="result-box">
+                    <span id="predicted-digit"></span>
+                </div>
+            </div>
+            
+            <div id="error-message" class="error-msg hidden"></div>
+        </main>
+    </div>
+
+    <script>
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const browseBtn = document.getElementById('browse-btn');
+        const imagePreview = document.getElementById('image-preview');
+        const uploadContent = document.querySelector('.upload-content');
+        const predictBtn = document.getElementById('predict-btn');
+        const resultContainer = document.getElementById('result-container');
+        const predictedDigit = document.getElementById('predicted-digit');
+        const invertCheck = document.getElementById('invert-check');
+        const errorMsg = document.getElementById('error-message');
+
+        let selectedFile = null;
+
+        // Trigger file input dialog
+        browseBtn.addEventListener('click', () => fileInput.click());
+
+        // Handle file browse selection
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        // Drag and drop mechanics
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover'), false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover'), false);
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            if (dt.files.length) {
+                handleFile(dt.files[0]);
+            }
+        });
+
+        function handleFile(file) {
+            selectedFile = file;
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = function() {
+                imagePreview.src = reader.result;
+                imagePreview.classList.remove('hidden');
+                uploadContent.classList.add('hidden');
+                predictBtn.classList.remove('hidden');
+                resultContainer.classList.add('hidden');
+                errorMsg.classList.add('hidden');
+            }
+        }
+
+        // Handle prediction
+        predictBtn.addEventListener('click', async () => {
+            if (!selectedFile) return;
+
+            predictBtn.innerText = 'Analyzing Image...';
+            predictBtn.classList.add('loading');
+            resultContainer.classList.add('hidden');
+            errorMsg.classList.add('hidden');
+
+            const formData = new FormData();
+            formData.append('image', selectedFile);
+            formData.append('invert', invertCheck.checked);
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    errorMsg.innerText = data.error;
+                    errorMsg.classList.remove('hidden');
+                } else {
+                    predictedDigit.innerText = data.prediction;
+                    resultContainer.classList.remove('hidden');
+                }
+            } catch (err) {
+                errorMsg.innerText = 'Network error predicting image.';
+                errorMsg.classList.remove('hidden');
+                console.error(err);
+            } finally {
+                predictBtn.innerText = 'Predict Digit';
+                predictBtn.classList.remove('loading');
+            }
+        });
+    </script>
+</body>
+</html>
