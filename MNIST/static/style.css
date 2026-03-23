@@ -22,13 +22,15 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
     position: relative;
+    padding: 2rem 0;
 }
 
 /* Background animated blobs */
 .background-elements {
-    position: absolute;
+    position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
     z-index: -1;
     overflow: hidden;
