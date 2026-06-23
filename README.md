@@ -1,52 +1,49 @@
-# 🌿 Gradient Garden
+# Gradient Garden
 
-> A collection of machine learning experiments and models — where ideas grow, bloom, and sometimes overfit 🌸
+> A collection of machine learning experiments and models focused on practical analysis, model development, and evaluation.
 
-## 📘 About the Project
+## About the Project
 
-**Gradient Garden** is my personal machine learning playground.
-Here I explore and implement various ML concepts — from data preprocessing and visualization to regression models and fine-tuned ensembles.
+Gradient Garden is a personal repository for exploring machine learning concepts through applied projects. It includes work on data preprocessing, exploratory analysis, regression modeling, and performance evaluation.
 
-The goal: to understand how each algorithm “learns” and to nurture intuition about how data, models, and evaluation metrics connect.
-
----
-
-## 🧠 Current Project: California Housing Prediction
-
-A regression task predicting median house values in California using census data.
-
-### ✨ Highlights
-
-* **Data Preprocessing:** Handling missing values, feature scaling, and pipeline creation.
-* **Exploratory Data Analysis (EDA):** Visualized relationships between income, location, and housing prices using `matplotlib` and `seaborn`.
-* **Models Implemented:**
-
-  * Linear Regression
-  * Decision Tree Regressor
-  * Random Forest Regressor (with Grid Search fine-tuning)
-* **Performance Metric:** RMSE ≈ **47,000** after model tuning
+The objective is to develop a clearer understanding of how algorithms learn from data and how model behavior can be assessed using appropriate quantitative metrics.
 
 ---
 
-## 🧩 Tech Stack
+## Current Project: California Housing Prediction
 
-* **Language:** Python 🐍
-* **Libraries:**
-  `pandas`, `numpy`, `matplotlib`, `seaborn`, `scikit-learn`
-* **Environment:** Jupyter Notebook / VS Code
+This project addresses a regression task involving the prediction of median house values in California using census-based housing data.
+
+### Highlights
+
+- Data preprocessing, including handling missing values, feature scaling, and pipeline construction.
+- Exploratory data analysis to examine relationships among income, location, and housing price.
+- Implementation of multiple regression models, including:
+  - Linear Regression
+  - Decision Tree Regressor
+  - Random Forest Regressor with hyperparameter tuning
+- Model evaluation using RMSE, with results improved through tuning.
 
 ---
 
-## 🚀 How to Run
+## Tech Stack
 
-1. **Clone the repository**
+- Language: Python
+- Libraries: pandas, numpy, matplotlib, seaborn, scikit-learn
+- Environment: Jupyter Notebook and VS Code
+
+---
+
+## How to Run
+
+1. Clone the repository:
 
    ```bash
    git clone https://github.com/your-username/gradient-garden.git
    cd gradient-garden
    ```
 
-2. **Create and activate a virtual environment**
+2. Create and activate a virtual environment:
 
    ```bash
    python -m venv venv
@@ -54,13 +51,13 @@ A regression task predicting median house values in California using census data
    source venv/bin/activate  # On macOS/Linux
    ```
 
-3. **Install dependencies**
+3. Install dependencies:
 
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Run the notebooks**
+4. Run the notebooks:
 
    ```bash
    jupyter notebook
@@ -68,20 +65,20 @@ A regression task predicting median house values in California using census data
 
 ---
 
-## 🌱 Future Additions
+## Future Additions
 
-* 🧩 Feature Engineering experiments
-* 🌳 Gradient Boosting and XGBoost comparisons
-* 🔍 Model interpretability (SHAP, feature importance)
-* 🪴 Interactive dashboards (Plotly / Streamlit)
+- Feature engineering experiments
+- Comparative analysis using gradient boosting and XGBoost
+- Model interpretability studies using SHAP and feature importance methods
+- Interactive dashboards using Plotly or Streamlit
 
 ---
 
-## 💬 Author
+## Author
 
-**Muhammad Ahmad**
-📍 GIKI | Machine Learning Enthusiast
-📧 [YourEmailHere]
-💻 [github.com/MuhammadAhmadF2005](https://github.com/MuhammadAhmadF2005)
+Muhammad Ahmad
+GIKI | Machine Learning Enthusiast
+Email: [YourEmailHere]
+GitHub: [github.com/MuhammadAhmadF2005](https://github.com/MuhammadAhmadF2005)
 
 ---
